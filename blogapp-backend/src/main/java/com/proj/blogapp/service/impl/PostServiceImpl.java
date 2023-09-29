@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -65,8 +66,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize,String sortBy,String sortDir) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.by(Sort.Direction.fromString(sortDir),sortBy));
         Page<Post> page = postRepo.findAll(pageable);
         List<Post> posts = page.getContent();
         PostResponse postResponse = new PostResponse();
@@ -95,5 +96,11 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getPostByCategories(Integer categoryId) {
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category","categoryId", categoryId));
         return postRepo.findByCategory(category).stream().map(post -> modelMapper.map(post,PostDto.class)).toList();
+    }
+
+    @Override
+    public List<PostDto> searchPosts(String title) {
+        List<Post> posts = postRepo.findByTitleContaining(title);
+        return posts.stream().map(post -> modelMapper.map(post,PostDto.class)).toList();
     }
 }

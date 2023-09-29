@@ -1,5 +1,6 @@
 package com.proj.blogapp.controllers;
 
+import com.proj.blogapp.constants.AppConstants;
 import com.proj.blogapp.dto.PostDto;
 import com.proj.blogapp.entities.Post;
 import com.proj.blogapp.payload.PostResponse;
@@ -43,10 +44,12 @@ public class PostController {
         return new ResponseEntity<>(posts,HttpStatus.OK);
     }
     @GetMapping("/posts")
-    public ResponseEntity<?> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-                                         @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize)
+    public ResponseEntity<?> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+                                         @RequestParam(value = "pageSize",defaultValue =AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+                                         @RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY,required = false) String  sortBy,
+                                         @RequestParam(value = "sortDir",defaultValue =AppConstants.SORT_DIR,required = false)String sortDir)
     {
-        PostResponse  posts = postService.getAllPosts(pageNumber,pageSize);
+        PostResponse  posts = postService.getAllPosts(pageNumber,pageSize,sortBy,sortDir);
 
         return new ResponseEntity<>(posts,HttpStatus.OK);
     }
@@ -63,6 +66,12 @@ public class PostController {
         postService.deletePostById(postId);
 
         return new ResponseEntity<>("post deleted successfully with postId "+postId,HttpStatus.OK);
+    }
+
+    @GetMapping("/posts/search/{keyword}")
+    public ResponseEntity<?> searchPosts(@PathVariable String keyword){
+        List<PostDto> postDtos = postService.searchPosts(keyword);
+        return new ResponseEntity<>(postDtos,HttpStatus.OK);
     }
 
 
