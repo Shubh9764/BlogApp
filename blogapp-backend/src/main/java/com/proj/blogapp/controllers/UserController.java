@@ -4,6 +4,7 @@ import com.proj.blogapp.dto.UserDto;
 import com.proj.blogapp.entities.User;
 import com.proj.blogapp.service.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

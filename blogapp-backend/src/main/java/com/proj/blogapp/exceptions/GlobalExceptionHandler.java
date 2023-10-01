@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,14 +32,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-//        Map<String, String> errMap = new HashMap<>();
-//        for (FieldError err : ex.getFieldErrors()) {
-//            errMap.put(err.getField(), err.getDefaultMessage());
-//        }
-//        return new ResponseEntity<>(errMap, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex){
+        Map<String, String> errMap = new HashMap<>();
+        errMap.put("message",ex.getMessage());
+        return new ResponseEntity<>(errMap,HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
@@ -46,5 +46,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiResponse apiResponse = new ApiResponse(message, false);
 
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex){
+        Map<String,Object> errmap =new HashMap<>();
+        errmap.put("message",ex.getMessage());
+        return new ResponseEntity<>(errmap,HttpStatus.BAD_REQUEST);
     }
 }

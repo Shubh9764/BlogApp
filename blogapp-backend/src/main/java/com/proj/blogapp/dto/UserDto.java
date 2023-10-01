@@ -1,6 +1,8 @@
 package com.proj.blogapp.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,6 +31,7 @@ public class UserDto {
 
     @NotEmpty
     @Size(min = 3, max = 10, message = "Password must be min of 3 chars and max 10 chars !!")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotEmpty
