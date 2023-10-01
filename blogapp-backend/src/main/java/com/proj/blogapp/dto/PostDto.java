@@ -1,6 +1,7 @@
 package com.proj.blogapp.dto;
 
 import com.proj.blogapp.entities.Category;
+import com.proj.blogapp.entities.Comment;
 import com.proj.blogapp.entities.User;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.JoinColumn;
@@ -10,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,4 +31,6 @@ public class PostDto {
     private CategoryDto category;
 
     private UserDto user;
+
+    private Set<CommentDto> comments ;
 }
