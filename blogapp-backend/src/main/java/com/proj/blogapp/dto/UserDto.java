@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,6 +30,7 @@ public class UserDto {
 
     @Column(unique = true)
     @Email(message = "email address not valid")
+    @NotEmpty
     private  String email;
 
     @NotEmpty
@@ -36,4 +40,6 @@ public class UserDto {
 
     @NotEmpty
     private String about;
+
+    private Set<RoleDto> roles = new HashSet<>();
 }

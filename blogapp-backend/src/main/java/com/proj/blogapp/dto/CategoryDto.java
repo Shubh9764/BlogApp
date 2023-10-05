@@ -16,14 +16,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CategoryDto {
 
-    private Integer categoryId;
+    private Integer id;
 
     @NotEmpty
     @Size(min=4,message = "Category Title must have more than 4 chars")
-    private  String categoryTitle;
+    private  String title;
 
 
     @NotEmpty
     @Size(min = 10,message = "Category Description must have more than 10 chars")
-    private String categoryDescription;
+    private String description;
 }

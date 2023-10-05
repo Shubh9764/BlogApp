@@ -30,8 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto updateCategory(CategoryDto categoryDto, Integer categoryId) {
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category","id",categoryId));
 
-        category.setCategoryDescription(categoryDto.getCategoryDescription());
-        category.setCategoryTitle(categoryDto.getCategoryTitle());
+        category.setCategoryDescription(categoryDto.getDescription());
+        category.setCategoryTitle(categoryDto.getTitle());
         category = categoryRepo.save(category);
         return mapper.map(category,CategoryDto.class);
     }
