@@ -12,6 +12,8 @@ import UserDashboard from "./pages/UserDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ProfileInfo from "./pages/ProfileInfo";
 import CustomNavBar from "./components/CustomNavBar";
+
+import PostPage from "./pages/PostPage";
 function App() {
   return (
     <>
@@ -20,6 +22,7 @@ function App() {
           <Routes>
             <Route path="/about" element={<About />} />
             <Route path="/" element={<Home />} />
+            <Route path="/posts/:postId" element={<PostPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/services" element={<Services />} />

@@ -37,13 +37,14 @@ export const getToken = () => {
 
 export const authAxios = axios.create({
     baseURL:BASE_URL,
+    headers:{Authorization:`Bearer ${getToken()}`}
 })
 
-authAxios.interceptors.request.use(config => {
-    const token = getToken()
+// authAxios.interceptors.request.use(config => {
+//     const token = getToken()
 
-    if(token){
-        config.headers.Authorization=`Bearer ${token}`
-        return config
-    }
-},error => Promise.reject(error))
+//     if(token){
+//         config.headers.Authorization=`Bearer ${token}`
+//         return config
+//     }
+// },error => Promise.reject(error))

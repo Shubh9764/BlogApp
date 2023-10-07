@@ -29,6 +29,9 @@ const CustomNavBar = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse  id="responsive-navbar-nav">
           <Nav className="me-auto">
+          <Nav.Link as={Link} to='/'>
+                New Feed
+            </Nav.Link>
             <Nav.Link as={Link} to='/services'>
                 Services
             </Nav.Link>

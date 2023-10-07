@@ -73,8 +73,9 @@ const [errors,setErrors] = useState({})
       setErrors(formErrors)
       return
     }
-    createPost(state).then((res ) => {
-      console.log(res)
+    createPost(state).then((res) => {
+      toast.success("post created successfully")
+      setState(INITIAL_STATE)
     })
     .catch((e) => {
       console.log(e)

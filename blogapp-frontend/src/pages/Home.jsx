@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import NewFeed from '../components/NewFeed'
 
 const Home = () => {
+
   return (
     <div>
-      Home
+      <NewFeed/>
     </div>
   )
 }
