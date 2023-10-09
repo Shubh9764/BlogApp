@@ -14,6 +14,7 @@ import ProfileInfo from "./pages/ProfileInfo";
 import CustomNavBar from "./components/CustomNavBar";
 
 import PostPage from "./pages/PostPage";
+import Categories from "./pages/Categories";
 function App() {
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/" element={<Home />} />
             <Route path="/posts/:postId" element={<PostPage />} />
+            <Route path="/categories/:categoryId" element={<Categories />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/services" element={<Services />} />

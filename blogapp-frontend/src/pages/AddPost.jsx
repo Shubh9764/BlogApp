@@ -10,19 +10,21 @@ import {
 } from "react-bootstrap";
 import { loadAllCategories } from "../services/category-service";
 import JoditEditor from "jodit-react";
-import { createPost } from "../services/post-service";
-import {toast} from 'react-toastify'
+import { createPost, uploadImage } from "../services/post-service";
+import { toast } from "react-toastify";
 
 const INITIAL_STATE = {
   title: "",
   content: "",
-  categoryId: '-1',
+  categoryId: "-1",
 };
 
 const AddPost = () => {
   const [state, setState] = useState(INITIAL_STATE);
   const [categories, setCategories] = useState([]);
-const [errors,setErrors] = useState({})
+
+  const [image, setImage] = useState(null);
+  const [errors, setErrors] = useState({});
   const resetHandler = () => {
     setState(INITIAL_STATE);
   };
@@ -32,11 +34,11 @@ const [errors,setErrors] = useState({})
       ...state,
       [e.target.name]: e.target.value,
     });
-    if(!!errors[e.target.name]){
+    if (!!errors[e.target.name]) {
       setErrors({
         ...errors,
-        [e.target.name]:null
-      })
+        [e.target.name]: null,
+      });
     }
   };
   const contentFieldChange = (data) => {
@@ -44,43 +46,53 @@ const [errors,setErrors] = useState({})
       ...state,
       content: data,
     });
-    if(!!errors['content']){
+    if (!!errors["content"]) {
       setErrors({
         ...errors,
-        'content':null
-      })
+        content: null,
+      });
     }
+  };
+  const fileChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
   };
 
   const validateFormErrors = () => {
-    const {title,content,categoryId}= state;
-    const newErrors = {}
-    console.log("validating")
-    if(title === '')
-      newErrors.title ="Title is Required"
-    if(content === '')
-      newErrors.content ="Content is Required"
-    if(categoryId === '-1')
-      newErrors.categoryId ="Category is Required"
+    const { title, content, categoryId } = state;
+    const newErrors = {};
+    console.log("validating");
+    if (title === "") newErrors.title = "Title is Required";
+    if (content === "") newErrors.content = "Content is Required";
+    if (categoryId === "-1") newErrors.categoryId = "Category is Required";
 
-    return newErrors
-  }
+    return newErrors;
+  };
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     console.log(state);
-    const formErrors = validateFormErrors()
-    if(Object.keys(formErrors).length > 0){
-      setErrors(formErrors)
-      return
+    const formErrors = validateFormErrors();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
     }
-    createPost(state).then((res) => {
-      toast.success("post created successfully")
-      setState(INITIAL_STATE)
-    })
-    .catch((e) => {
-      console.log(e)
-      toast("Post creation Failed ")
-    })
+    createPost(state)
+      .then((res) => {
+        uploadImage(res.postId, image)
+          .then((ires) => {
+            console.log(ires);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        toast.success("post created successfully");
+        setState(INITIAL_STATE);
+        setImage(null)
+      })
+      .catch((e) => {
+        console.log(e);
+        toast("Post creation Failed ");
+      });
   };
 
   useEffect(() => {
@@ -112,9 +124,11 @@ const [errors,setErrors] = useState({})
                   placeholder="Enter Title"
                   onChange={stateChangeHandler}
                   value={state.title}
-                  isInvalid={errors.title?true:false}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
+                  isInvalid={errors.title ? true : false}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.title}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Content</Form.Label>
@@ -123,22 +137,33 @@ const [errors,setErrors] = useState({})
                   value={state.content}
                   tabIndex={1} // tabIndex of textarea
                   onChange={contentFieldChange}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.content}</Form.Control.Feedback>
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.content}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Image</Form.Label>
+                <Form.Control required type="file" onChange={fileChange} />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Label>Post Content</Form.Label>
-                <Form.Select onChange={stateChangeHandler} name="categoryId" defaultValue={-1} isInvalid={errors.categoryId?true:false}>
-                  <option value={-1}>
-                    --Pick a car brand--
-                  </option>
+                <Form.Select
+                  onChange={stateChangeHandler}
+                  name="categoryId"
+                  defaultValue={-1}
+                  isInvalid={errors.categoryId ? true : false}
+                >
+                  <option value={-1}>--Pick a Category--</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.title}
                     </option>
                   ))}
                 </Form.Select>
-                <Form.Control.Feedback type="invalid">{errors.categoryId}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {errors.categoryId}
+                </Form.Control.Feedback>
               </Form.Group>
               <Container className="text-center">
                 <Button variant="primary" type="submit">

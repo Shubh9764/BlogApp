@@ -16,8 +16,8 @@ export const isLoggedIn = () => {
     return localStorage.getItem("data")?true:false
 }
 
-export const doLogin = (token,next) =>{
-    localStorage.setItem("data",JSON.stringify(token))
+export const doLogin = (data,next) =>{
+    localStorage.setItem("data",JSON.stringify(data))
     next()
 }
 export const doLogout = (next) =>{
